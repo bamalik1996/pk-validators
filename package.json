@@ -1,0 +1,124 @@
+{
+  "name": "pk-validators",
+  "version": "0.1.0",
+  "description": "Pakistan-specific validators for CNIC, NTN, IBAN, phone numbers, and postal codes. Adapters for Zod, Yup, Joi, Valibot, Superstruct, and class-validator.",
+  "author": "Bilal Malik <bilalmalik531996@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bamalik1996/pk-validators"
+  },
+  "keywords": [
+    "pakistan",
+    "pk",
+    "cnic",
+    "ntn",
+    "iban",
+    "phone",
+    "postal",
+    "validator",
+    "validation",
+    "zod",
+    "yup",
+    "joi",
+    "valibot",
+    "superstruct",
+    "class-validator",
+    "nestjs"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./zod": {
+      "types": "./dist/adapters/zod.d.ts",
+      "import": "./dist/adapters/zod.mjs",
+      "require": "./dist/adapters/zod.js"
+    },
+    "./yup": {
+      "types": "./dist/adapters/yup.d.ts",
+      "import": "./dist/adapters/yup.mjs",
+      "require": "./dist/adapters/yup.js"
+    },
+    "./joi": {
+      "types": "./dist/adapters/joi.d.ts",
+      "import": "./dist/adapters/joi.mjs",
+      "require": "./dist/adapters/joi.js"
+    },
+    "./valibot": {
+      "types": "./dist/adapters/valibot.d.ts",
+      "import": "./dist/adapters/valibot.mjs",
+      "require": "./dist/adapters/valibot.js"
+    },
+    "./superstruct": {
+      "types": "./dist/adapters/superstruct.d.ts",
+      "import": "./dist/adapters/superstruct.mjs",
+      "require": "./dist/adapters/superstruct.js"
+    },
+    "./class-validator": {
+      "types": "./dist/adapters/class-validator.d.ts",
+      "import": "./dist/adapters/class-validator.mjs",
+      "require": "./dist/adapters/class-validator.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/adapters/zod.ts src/adapters/yup.ts src/adapters/joi.ts src/adapters/valibot.ts src/adapters/superstruct.ts src/adapters/class-validator.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "devDependencies": {
+    "class-validator": "^0.14.0",
+    "joi": "^17.13.0",
+    "reflect-metadata": "^0.2.0",
+    "superstruct": "^2.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "valibot": "^1.0.0",
+    "vitest": "^1.6.0",
+    "yup": "^1.4.0",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "class-validator": ">=0.14.0",
+    "joi": ">=17.0.0",
+    "superstruct": ">=2.0.0",
+    "valibot": ">=1.0.0",
+    "yup": ">=1.0.0",
+    "zod": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "class-validator": {
+      "optional": true
+    },
+    "joi": {
+      "optional": true
+    },
+    "superstruct": {
+      "optional": true
+    },
+    "valibot": {
+      "optional": true
+    },
+    "yup": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
+  },
+  "sideEffects": false
+}
