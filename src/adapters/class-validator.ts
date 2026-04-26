@@ -21,6 +21,7 @@ import { isValidPhone } from '../validators/phone';
 import { isValidNtn } from '../validators/ntn';
 import { isValidIban } from '../validators/iban';
 import { isValidPostal } from '../validators/postal';
+import { isValidPassport } from '../validators/passport';
 import type { PhoneValidationOptions } from '../validators/phone';
 
 export function IsPkCnic(validationOptions?: ValidationOptions) {
@@ -115,6 +116,25 @@ export function IsPkPostal(validationOptions?: ValidationOptions) {
         },
         defaultMessage() {
           return 'Invalid Pakistani postal code';
+        },
+      },
+    });
+  };
+}
+
+export function IsPkPassport(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      name: 'isPkPassport',
+      target: object.constructor,
+      propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: unknown) {
+          return typeof value === 'string' && isValidPassport(value).valid;
+        },
+        defaultMessage() {
+          return 'Invalid Pakistani passport number';
         },
       },
     });

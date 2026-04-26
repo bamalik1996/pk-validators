@@ -1,12 +1,13 @@
 # pk-validators
 
-> Pakistan-specific validators for CNIC, NTN, IBAN, phone numbers, and postal codes.
+> **Pakistan Data Validation & Formatting SDK** — CNIC, NTN, IBAN, phone, passport, and postal codes.
 
 [![npm version](https://img.shields.io/npm/v/pk-validators)](https://www.npmjs.com/package/pk-validators)
+[![CI](https://github.com/bamalik1996/pk-validators/actions/workflows/ci.yml/badge.svg)](https://github.com/bamalik1996/pk-validators/actions/workflows/ci.yml)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/pk-validators)](https://bundlephobia.com/package/pk-validators)
 [![license](https://img.shields.io/npm/l/pk-validators)](./LICENSE)
 
-No dependencies. Tree-shakeable. TypeScript-first. Includes optional adapters for **Zod**, **Yup**, **Joi**, **Valibot**, **Superstruct**, and **class-validator**.
+Zero dependencies. Tree-shakeable. TypeScript-first. Built-in **data intelligence** (province, carrier, bank detection). Adapters for **Zod**, **Yup**, **Joi**, **Valibot**, **Superstruct**, and **class-validator**.
 
 ---
 
@@ -147,6 +148,31 @@ getProvince("74000"); // 'Sindh'
 
 getCity("99999"); // null  (unknown code)
 ```
+
+---
+
+### Passport
+
+```ts
+import { isValidPassport, parsePassport } from "pk-validators";
+
+isValidPassport("AB1234567");
+// { valid: true, data: { number: 'AB1234567', series: 'AB', serial: '1234567', type: 'ordinary' } }
+
+isValidPassport("DA1234567");
+// { valid: true, data: { type: 'diplomatic' } }
+
+isValidPassport("SA1234567");
+// { valid: true, data: { type: 'official' } }
+
+// Parse — throws if invalid
+const passport = parsePassport("AB1234567");
+passport.series; // 'AB'
+passport.serial; // '1234567'
+passport.type; // 'ordinary'
+```
+
+Format: 2 uppercase letters + 7 digits (e.g. `AB1234567`). Detects passport type from series prefix.
 
 ---
 
@@ -320,6 +346,81 @@ Each validator lives in its own file. If you only import `isValidCnic`, only CNI
 ```ts
 import { isValidCnic } from "pk-validators"; // ~0.5 KB
 ```
+
+---
+
+## Usage with React (Hook Form + Zod)
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { pkCnic, pkPhone } from "pk-validators/zod";
+
+const schema = z.object({
+  cnic: pkCnic(),
+  phone: pkPhone(),
+});
+
+function KycForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(schema) });
+
+  return (
+    <form onSubmit={handleSubmit(console.log)}>
+      <input {...register("cnic")} placeholder="42101-1234567-9" />
+      {errors.cnic && <span>{errors.cnic.message}</span>}
+
+      <input {...register("phone")} placeholder="03001234567" />
+      {errors.phone && <span>{errors.phone.message}</span>}
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+---
+
+## Usage with NestJS (class-validator)
+
+```ts
+import {
+  IsPkCnic,
+  IsPkPhone,
+  IsPkNtn,
+  IsPkIban,
+  IsPkPassport,
+} from "pk-validators/class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
+
+export class CreateCustomerDto {
+  @IsNotEmpty()
+  @IsPkCnic({ message: "Please enter a valid 13-digit CNIC" })
+  cnic: string;
+
+  @IsNotEmpty()
+  @IsPkPhone()
+  phone: string;
+
+  @IsOptional()
+  @IsPkNtn()
+  ntn?: string;
+
+  @IsOptional()
+  @IsPkIban()
+  iban?: string;
+
+  @IsOptional()
+  @IsPkPassport()
+  passport?: string;
+}
+```
+
+Use with `ValidationPipe` in your controller — errors are returned automatically.
 
 ---
 

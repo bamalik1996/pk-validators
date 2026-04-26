@@ -282,3 +282,74 @@ describe('Postal', () => {
     });
   });
 });
+
+// ============================================================
+// Passport
+// ============================================================
+import { isValidPassport, parsePassport } from '../src/validators/passport';
+
+describe('Passport', () => {
+  describe('isValidPassport', () => {
+    it('accepts valid passport AB1234567', () => {
+      const r = isValidPassport('AB1234567');
+      expect(r.valid).toBe(true);
+      expect(r.data?.series).toBe('AB');
+      expect(r.data?.serial).toBe('1234567');
+      expect(r.data?.type).toBe('ordinary');
+    });
+
+    it('accepts lowercase and normalizes to uppercase', () => {
+      const r = isValidPassport('ab1234567');
+      expect(r.valid).toBe(true);
+      expect(r.data?.number).toBe('AB1234567');
+    });
+
+    it('detects diplomatic passport (D-prefix)', () => {
+      const r = isValidPassport('DA1234567');
+      expect(r.valid).toBe(true);
+      expect(r.data?.type).toBe('diplomatic');
+    });
+
+    it('detects official passport (S-prefix)', () => {
+      const r = isValidPassport('SA1234567');
+      expect(r.valid).toBe(true);
+      expect(r.data?.type).toBe('official');
+    });
+
+    it('rejects too short', () => {
+      const r = isValidPassport('AB12345');
+      expect(r.valid).toBe(false);
+      expect(r.error).toContain('9 characters');
+    });
+
+    it('rejects all digits', () => {
+      const r = isValidPassport('123456789');
+      expect(r.valid).toBe(false);
+      expect(r.error).toContain('2 letters');
+    });
+
+    it('rejects all letters', () => {
+      const r = isValidPassport('ABCDEFGHI');
+      expect(r.valid).toBe(false);
+      expect(r.error).toContain('7 digits');
+    });
+
+    it('rejects empty string', () => {
+      expect(isValidPassport('').valid).toBe(false);
+    });
+  });
+
+  describe('parsePassport', () => {
+    it('returns parsed passport object', () => {
+      const p = parsePassport('AB1234567');
+      expect(p.series).toBe('AB');
+      expect(p.serial).toBe('1234567');
+      expect(p.type).toBe('ordinary');
+      expect(p.number).toBe('AB1234567');
+    });
+
+    it('throws on invalid passport', () => {
+      expect(() => parsePassport('123')).toThrow();
+    });
+  });
+});

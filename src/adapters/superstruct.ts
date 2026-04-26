@@ -13,6 +13,7 @@ import { isValidPhone } from '../validators/phone';
 import { isValidNtn } from '../validators/ntn';
 import { isValidIban } from '../validators/iban';
 import { isValidPostal } from '../validators/postal';
+import { isValidPassport } from '../validators/passport';
 import type { PhoneValidationOptions } from '../validators/phone';
 
 export const pkCnic = () =>
@@ -43,4 +44,10 @@ export const pkPostal = () =>
   refine(string(), 'pk-postal', (value) => {
     const result = isValidPostal(value);
     return result.valid || result.error || 'Invalid postal code';
+  });
+
+export const pkPassport = () =>
+  refine(string(), 'pk-passport', (value) => {
+    const result = isValidPassport(value);
+    return result.valid || result.error || 'Invalid passport number';
   });

@@ -1,7 +1,7 @@
 {
   "name": "pk-validators",
   "version": "0.1.0",
-  "description": "Pakistan-specific validators for CNIC, NTN, IBAN, phone numbers, and postal codes. Adapters for Zod, Yup, Joi, Valibot, Superstruct, and class-validator.",
+  "description": "Pakistan Data Validation & Formatting SDK — CNIC, NTN, IBAN, phone, passport, and postal codes. Zero deps. Adapters for Zod, Yup, Joi, Valibot, Superstruct, class-validator.",
   "author": "Bilal Malik <bilalmalik531996@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -16,6 +16,7 @@
     "iban",
     "phone",
     "postal",
+    "passport",
     "validator",
     "validation",
     "zod",

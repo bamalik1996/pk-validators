@@ -13,6 +13,7 @@ import { isValidPhone } from '../validators/phone';
 import { isValidNtn } from '../validators/ntn';
 import { isValidIban } from '../validators/iban';
 import { isValidPostal } from '../validators/postal';
+import { isValidPassport } from '../validators/passport';
 import type { PhoneValidationOptions } from '../validators/phone';
 
 export const pkCnic = () =>
@@ -66,6 +67,17 @@ export const pkPostal = () =>
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: result.error ?? 'Invalid postal code',
+      });
+    }
+  });
+
+export const pkPassport = () =>
+  z.string().superRefine((val, ctx) => {
+    const result = isValidPassport(val);
+    if (!result.valid) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: result.error ?? 'Invalid passport number',
       });
     }
   });

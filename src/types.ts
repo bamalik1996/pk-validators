@@ -61,3 +61,10 @@ export interface ParsedPostal {
   city: string;
   province: Province;
 }
+
+export interface ParsedPassport {
+  number: string;
+  series: string;
+  serial: string;
+  type: 'ordinary' | 'diplomatic' | 'official';
+}

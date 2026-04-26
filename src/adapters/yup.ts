@@ -13,6 +13,7 @@ import { isValidPhone } from '../validators/phone';
 import { isValidNtn } from '../validators/ntn';
 import { isValidIban } from '../validators/iban';
 import { isValidPostal } from '../validators/postal';
+import { isValidPassport } from '../validators/passport';
 import type { PhoneValidationOptions } from '../validators/phone';
 
 export const pkCnic = () =>
@@ -51,6 +52,14 @@ export const pkPostal = () =>
   yup.string().test('pk-postal', 'Invalid postal code', function (value) {
     if (!value) return true;
     const result = isValidPostal(value);
+    if (result.valid) return true;
+    return this.createError({ message: result.error });
+  });
+
+export const pkPassport = () =>
+  yup.string().test('pk-passport', 'Invalid passport number', function (value) {
+    if (!value) return true;
+    const result = isValidPassport(value);
     if (result.valid) return true;
     return this.createError({ message: result.error });
   });

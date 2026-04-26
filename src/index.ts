@@ -9,6 +9,7 @@ export type {
   ParsedNtn,
   ParsedIban,
   ParsedPostal,
+  ParsedPassport,
 } from './types';
 
 // CNIC
@@ -40,3 +41,7 @@ export {
   getProvince,
   parsePostal,
 } from './validators/postal';
+
+// Passport
+export { isValidPassport, parsePassport } from './validators/passport';
+export type { PassportType } from './validators/passport';
